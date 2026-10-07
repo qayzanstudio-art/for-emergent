@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#146b61" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Mie-dNight POS - Ramadhan Edition 🌙</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3448/3448609.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Retro Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bungee+Inline&family=Special+Elite&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --retro-grain: url('https://www.transparenttextures.com/patterns/p6.png');
+            --ramadhan-green: #146b61;
+            --ramadhan-gold: #d4af37;
+            --night-blue: #0a2e36;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #FDFBF6;
+            color: #1A202C;
+            background-image: var(--retro-grain);
+            overscroll-behavior-y: none;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Star Twinkle Effect */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+        .star {
+            position: absolute;
+            color: white;
+            user-select: none;
+            z-index: 1000;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            opacity: 0;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+        }
+
+        /* Festive Burst Particle */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 20px;
+            animation: burst 0.8s ease-out forwards;
+        }
+        @keyframes burst {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(var(--tr)); opacity: 0; }
+        }
+
+        /* Ramadhan Lanterns / Fairy Lights */
+        .lightrope {
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            position: absolute;
+            z-index: 30;
+            margin: -10px 0 0 0;
+            padding: 0;
+            pointer-events: none;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+        }
+        .lightrope li {
+            position: relative;
+            animation-fill-mode: both;
+            animation-iteration-count: infinite;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: block;
+            width: 14px;
+            height: 24px;
+            border-radius: 50% 50% 20% 20%;
+            margin: 15px;
+            display: inline-block;
+            background: var(--ramadhan-gold);
+            box-shadow: 0px 4.6px 20px 2px var(--ramadhan-gold);
+            animation-name: glow-gold;
+            animation-duration: 2s;
+        }
+        .lightrope li:nth-child(2n+1) { background: #00f7a5; box-shadow: 0px 4.6px 20px 2px #00f7a5; animation-name: glow-green; animation-duration: 3s; }
+        .lightrope li:nth-child(4n+2) { background: #ffaa00; box-shadow: 0px 4.6px 20px 2px #ffaa00; animation-name: glow-orange; animation-duration: 1.5s; }
+        
+        @keyframes glow-gold { 0%, 100% { opacity: 1; box-shadow: 0px 0px 20px 5px var(--ramadhan-gold); } 50% { opacity: 0.4; box-shadow: 0px 0px 5px 1px var(--ramadhan-gold); } }
+        @keyframes glow-green { 0%, 100% { opacity: 1; box-shadow: 0px 0px 20px 5px #00f7a5; } 50% { opacity: 0.4; box-shadow: 0px 0px 5px 1px #00f7a5; } }
+        @keyframes glow-orange { 0%, 100% { opacity: 1; box-shadow: 0px 0px 20px 5px #ffaa00; } 50% { opacity: 0.4; box-shadow: 0px 0px 5px 1px #ffaa00; } }
+
+        /* Board Specific Lights */
+        .board-light {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            z-index: 10;
+            animation: board-flash 1.2s infinite alternate;
+        }
+        @keyframes board-flash {
+            0% { opacity: 0.5; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px currentColor; }
+        }
+
+        .retro-title {
+            font-family: 'Bungee Inline', cursive;
+        }
+        .retro-typewriter {
+            font-family: 'Special Elite', cursive;
+        }
+        .retro-card {
+            background-image: var(--retro-grain);
+            border: 3px solid #146b61;
+            box-shadow: 6px 6px 0px #146b61;
+        }
+        
+        /* Festive Button Effects */
+        .retro-btn, .btn-retro {
+            position: relative;
+            border: 2px solid #146b61;
+            box-shadow: 4px 4px 0px #146b61;
+            transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.1s;
+        }
+        .retro-btn:active, .btn-retro:active {
+            box-shadow: 0px 0px 0px #146b61 !important;
+            transform: translate(4px, 4px) scale(0.95) !important;
+            filter: brightness(1.1);
+        }
+        
+        /* Floating Ornaments */
+        .float-ornament {
+            position: absolute;
+            pointer-events: none;
+            animation: float 5s ease-in-out infinite;
+            z-index: 5;
+            opacity: 0.5;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(15deg); }
+        }
+    </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.20.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div class="stars-container" id="stars"></div>
+    <div id="root"></div>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW fail', err));
+            });
+        }
+
+        // Generate Stars
+        const starsContainer = document.getElementById('stars');
+        const starShapes = ['✦', '✧', '★', '☆', '•'];
+        for(let i=0; i<60; i++) {
+            let star = document.createElement('div');
+            star.className = 'star';
+            star.innerHTML = starShapes[Math.floor(Math.random()*starShapes.length)];
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.top = Math.random() * 100 + 'vh';
+            star.style.setProperty('--duration', (Math.random() * 2 + 1) + 's');
+            star.style.fontSize = (Math.random() * 8 + 6) + 'px';
+            star.style.color = Math.random() > 0.5 ? '#d4af37' : '#ffffff';
+            starsContainer.appendChild(star);
+        }
+
+        // Global Click Particle Effect
+        const festiveParticles = ['🌙', '⭐', '🏮', '✨', '🕌', '🥘', '🥙'];
+        window.addEventListener('mousedown', (e) => {
+            if (e.target.closest('button') || e.target.closest('a') || e.target.tagName === 'BUTTON') {
+                createFestiveBurst(e.clientX, e.clientY);
+            }
+        });
+
+        function createFestiveBurst(x, y) {
+            const count = 6;
+            for (let i = 0; i < count; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.innerHTML = festiveParticles[Math.floor(Math.random() * festiveParticles.length)];
+                p.style.left = x + 'px';
+                p.style.top = y + 'px';
+                const tx = (Math.random() - 0.5) * 180;
+                const ty = (Math.random() - 0.5) * 180;
+                const tr = (Math.random() - 0.5) * 360;
+                p.style.setProperty('--tx', `${tx}px`);
+                p.style.setProperty('--ty', `${ty}px`);
+                p.style.setProperty('--tr', `${tr}deg`);
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), 800);
+            }
+        }
+    </script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
